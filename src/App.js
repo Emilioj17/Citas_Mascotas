@@ -1,65 +1,89 @@
-
+import React, { Fragment, useEffect, useState } from 'react';
 import './App.css';
+import Formulario from './Formulario';
+const { uuid } = require('uuidv4');
 
 function App() {
+  const [id, setId] = useState([])
+  const [cita, setCita] = useState({
+    nombre: "",
+    propietario: "",
+    fecha: "",
+    hora: "",
+    tipo: "",
+    sintomas: ""
+  });
 
-
-
-  const Formulario = () => {
+  const Citas = id.map((cadaId, index) => {
+    const cat = JSON.parse(localStorage.getItem(cadaId));
+    console.log(cat);
     return (
-      <div className="translucent-form-overlay">
-      <form>
-        <h3>Crear Cita</h3>
-        <div className="">
-          <label>Nombre Mascota
-            <input type="text" name="keyword" placeholder="Nombre de tu Mascota" />
-          </label>
-        </div>
-        <div className="">
-          <label>Nombre Dueño
-            <input type="text" name="keyword" placeholder="Nombre del Dueño de la Mascota" />
-          </label>
-        </div>
-        <div className="">
-          <label>Fecha
-            <input type="date" name="keyword" />
-          </label>
-        </div>
-        <div className="">
-          <label>Hora
-            <input type="time" name="keyword" />
-          </label>
-        </div>
-        <div className="">
-          <label>Tipo de Mascota
-            <select name="status" type="text">
-              <option>Perro</option>
-              <option value="rent">Gato</option>
-              <option value="buy">Pajaro</option>
-            </select>
-          </label>
-        </div>
-        <div className="">
-          <label>Sintomas
-            <textarea placeholder="Escribe los sintomas de tu mascota aquí" rows="4"></textarea>
-          </label>
-        </div>
-        <button type="button" className="primary button expanded search-button">
-          Crear Cita
-        </button>
-      </form>
-    </div>
+      <Fragment>
+        <h1>Hola {cat["nombre"]}</h1>
+        {/* <h3>Nombre de la Mascota: {cat}</h3> */}
+        {/* <p>Dueño: {cita["propietario"]}</p>
+        <p>Tipo de Mascota: {cita["tipo"]}</p>
+        <p>Sintomas: {cita["sintomas"]}</p>
+        <p>Dia de la Cita: {cita["fecha"]}</p>
+        <p>Horario: {cita["hora"]}</p>
+        <button type="button" className="alert button small"> Cancelar Cita </button> */}
+    </Fragment>
     )
+  })
+
+  // const Citas = () => {
+  //   if (id != []) {
+  //     for (let index = 0; index < id.length; index++) {
+  //       const element = id[index];
+        
+  //     }
+  //     return (
+        // <Fragment>
+        //   <h3>Nombre de la Mascota: {cita["nombre"]}</h3>
+        //   <p>Dueño: {cita["propietario"]}</p>
+        //   <p>Tipo de Mascota: {cita["tipo"]}</p>
+        //   <p>Sintomas: {cita["sintomas"]}</p>
+        //   <p>Dia de la Cita: {cita["fecha"]}</p>
+        //   <p>Horario: {cita["hora"]}</p>
+        //   <button type="button" className="alert button small"> Cancelar Cita </button>
+        // </Fragment>
+  //     )
+  //   } else if (id==[]) {
+  //     return (
+  //       <div>Nada</div>
+  //     )
+  //   }else {
+  //     return (
+  //       <h1>Nada</h1>
+  //     )
+  //   }
+  // }
+
+  const HandlerEnvio = (event) => {
+    event.preventDefault();
+    let idx = String(uuid());
+    setId([...id, idx]);
+    localStorage.setItem(idx, JSON.stringify(cita));
   }
+
+  const HandlerEnvio2 = (event) => {
+    console.log(id);
+  } 
 
   return (
     <div className="Main">
         <div className="Header"><h1>Administrador de Pacientes</h1></div>
         <div className="Izquierda">
-          <Formulario />
+        <Formulario cita={cita} setCita={setCita}/>
+        <button type="button" className="primary button expanded search-button" onClick={(e) => HandlerEnvio(e)}>
+            Crear Cita
+        </button>
+        <button type="button" className="primary button expanded search-button" onClick={(e) => HandlerEnvio2(e)}>
+            Prueba
+        </button>
         </div>
         <div className="Derecha">
-          Hola
+        {Citas}
         </div>
     </div>
   );
