@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import './App.css';
 import Formulario from './Formulario';
 const { uuid } = require('uuidv4');
 
 function App() {
-  const [id, setId] = useState([])
+  const [id, setId] = useState([]);
   const [cita, setCita] = useState({
     nombre: "",
     propietario: "",
@@ -14,50 +14,44 @@ function App() {
     sintomas: ""
   });
 
-  const Citas = id.map((cadaId, index) => {
-    const cat = JSON.parse(localStorage.getItem(cadaId));
-    console.log(cat);
-    return (
-      <Fragment>
-        <h1>Hola {cat["nombre"]}</h1>
-        {/* <h3>Nombre de la Mascota: {cat}</h3> */}
-        {/* <p>Dueño: {cita["propietario"]}</p>
-        <p>Tipo de Mascota: {cita["tipo"]}</p>
-        <p>Sintomas: {cita["sintomas"]}</p>
-        <p>Dia de la Cita: {cita["fecha"]}</p>
-        <p>Horario: {cita["hora"]}</p>
-        <button type="button" className="alert button small"> Cancelar Cita </button> */}
-    </Fragment>
-    )
-  })
+  useEffect(() => {
+    if (localStorage.key(0) === null) {
+      console.log("No has guardado nada");
+    } else {
+      for (let index = 0; index < 10; index++) {
+      let resultado = localStorage.key(index)
+      console.log("Esto es desde" + resultado);
+      setId(id =>[...id, resultado]);
+      
+      }
+    }
+    
+  }, [])
 
-  // const Citas = () => {
-  //   if (id != []) {
-  //     for (let index = 0; index < id.length; index++) {
-  //       const element = id[index];
-        
-  //     }
-  //     return (
-        // <Fragment>
-        //   <h3>Nombre de la Mascota: {cita["nombre"]}</h3>
-        //   <p>Dueño: {cita["propietario"]}</p>
-        //   <p>Tipo de Mascota: {cita["tipo"]}</p>
-        //   <p>Sintomas: {cita["sintomas"]}</p>
-        //   <p>Dia de la Cita: {cita["fecha"]}</p>
-        //   <p>Horario: {cita["hora"]}</p>
-        //   <button type="button" className="alert button small"> Cancelar Cita </button>
-        // </Fragment>
-  //     )
-  //   } else if (id==[]) {
-  //     return (
-  //       <div>Nada</div>
-  //     )
-  //   }else {
-  //     return (
-  //       <h1>Nada</h1>
-  //     )
-  //   }
-  // }
+  const Citas = id.map((cadaId, index) => {
+    console.log("Hola desde Citas" + cadaId);
+    const cat = JSON.parse(localStorage.getItem(cadaId));
+    try {
+      return (
+      <div className="cards" key={cadaId}>
+        <h3>Nombre de la Mascota: {cat["nombre"]}</h3>
+        <div className="dentro">
+          <p>Dueño: {cat["propietario"]}</p>
+          <p>Tipo de Mascota: {cat["tipo"]}</p>
+          <p>Sintomas: {cat["sintomas"]}</p>
+          <p>Dia de la Cita: {cat["fecha"]}</p>
+          <p>Horario: {cat["hora"]}</p>
+        </div>
+        <button type="button" className="alert button small" id={cadaId} onClick={(e)=>{HandlerBorrar(e)}}> Cancelar Cita </button>
+    </div>
+      )
+    }catch(error){
+      return (
+        <div></div>
+      )
+    }
+    
+  })
 
   const HandlerEnvio = (event) => {
     event.preventDefault();
@@ -65,10 +59,15 @@ function App() {
     setId([...id, idx]);
     localStorage.setItem(idx, JSON.stringify(cita));
   }
+  
+  const HandlerBorrar = (event) => {
+    console.log(event.target.id);
+    const nuevoId = id.filter(id=>id!==event.target.id)
+    setId(nuevoId);
+    localStorage.removeItem(event.target.id)
+  }
 
-  const HandlerEnvio2 = (event) => {
-    console.log(id);
-  } 
+  const titulo = id.length === 0 ? 'No hay citas' : 'Administra tus Citas';
 
   return (
     <div className="Main">
@@ -78,11 +77,10 @@ function App() {
         <button type="button" className="primary button expanded search-button" onClick={(e) => HandlerEnvio(e)}>
             Crear Cita
         </button>
-        <button type="button" className="primary button expanded search-button" onClick={(e) => HandlerEnvio2(e)}>
-            Prueba
-        </button>
         </div>
-        <div className="Derecha">
+      <div className="Derecha">
+        <h3>Citas Agendadas</h3>
+        <p>Tienes: {titulo} </p>
         {Citas}
         </div>
     </div>

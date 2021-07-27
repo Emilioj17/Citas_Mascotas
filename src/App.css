@@ -1,4 +1,6 @@
 body {
+	height: 100%;
+	width: 100%;
 	background: rgb(2, 0, 36);
 	background: linear-gradient(
 		293deg,
@@ -11,6 +13,13 @@ body {
 }
 
 .Main {
+	background: rgb(2, 0, 36);
+	background: linear-gradient(
+		293deg,
+		rgba(2, 0, 36, 1) 0%,
+		rgba(9, 93, 121, 1) 53%,
+		rgba(0, 212, 255, 1) 100%
+	);
 	display: grid;
 	grid-template-columns: auto auto;
 	grid-template-rows: 10vh auto 10vh;
@@ -33,6 +42,18 @@ body {
 .Derecha {
 	grid-area: Derecha;
 	padding: 2vh;
+}
+
+.cards {
+	background-color: white;
+	margin: 1vh;
+	padding: 1vh;
+}
+
+.dentro {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	grid-template-rows: auto;
 }
 
 @media only screen and (max-width: 800px) {
