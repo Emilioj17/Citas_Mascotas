@@ -65,6 +65,7 @@ function App() {
     let idx = String(uuid());
     setId([...id, idx]);
     localStorage.setItem(idx, JSON.stringify(cita));
+    window.location.reload(true);
   }
   
   const HandlerBorrar = (event) => {
