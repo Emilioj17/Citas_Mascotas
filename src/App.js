@@ -13,6 +13,7 @@ function App() {
     tipo: "",
     sintomas: ""
   });
+  const [alert, setAlert] = useState(false);
 
   useEffect(() => {
     if (localStorage.key(0) === null) {
@@ -55,6 +56,12 @@ function App() {
 
   const HandlerEnvio = (event) => {
     event.preventDefault();
+    if(cita.nombre.trim() === "" || cita.propietario.trim() === ""  || cita.fecha.trim() === ""  || cita.hora.trim() === ""  || cita.sintomas.trim() === "" ){
+      setAlert(true);
+      return;
+    } else {
+      setAlert(false);
+    }
     let idx = String(uuid());
     setId([...id, idx]);
     localStorage.setItem(idx, JSON.stringify(cita));
@@ -73,9 +80,12 @@ function App() {
     <div className="Main">
         <div className="Header"><h1>Administrador de Pacientes</h1></div>
         <div className="Izquierda">
-        <Formulario cita={cita} setCita={setCita}/>
+        <div className="alert-box alert radius" style={{ backgroundColor: "red", padding:"1vh", display:(alert ? "": "none") }}>
+            Error, todos los campos son necesarios.
+          </div>
+          <Formulario cita={cita} setCita={setCita}/>
         <button type="button" className="primary button expanded search-button" onClick={(e) => HandlerEnvio(e)}>
-            Crear Cita
+          Crear Cita
         </button>
         </div>
       <div className="Derecha">
